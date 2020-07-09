@@ -1,0 +1,43 @@
+REM create variables for the year, month, and day
+
+set myyear=%date:~-4%
+set mymonth=%date:~-10,2%
+set myday=%date:~7,2%
+
+REM make the directories we will be moving the files into
+
+mkdir "\\labshared\neonatal1\Horizon LIMS\Hemoglobinopathy\Bio-Rad Hemoglobin VARIANTnbs\Daily Result Files\%myyear%\%mymonth%\%myday%"
+mkdir "\\hobbes\hobbes_results_orders\Summaries\%myyear%\%mymonth%\%myday%"
+mkdir "\\calvin\calvin_results_orders\Summaries\%myyear%\%mymonth%\%myday%"
+mkdir "\\calvin\calvin_results_orders\Results\%myyear%\%mymonth%\%myday%"
+mkdir "\\hobbes\hobbes_results_orders\Results\%myyear%\%mymonth%\%myday%"
+
+REM Copy the results from the instruments to Specimen gate
+
+copy \\hobbes\hobbes_results_orders\Results\*.* \\hewpedbprd\sgroot\data\10297\ToSG
+copy \\calvin\calvin_results_orders\Results\*.* \\hewpedbprd\sgroot\data\10285\ToSG
+
+REM Copy results and summary files into the daily result files folder
+
+copy \\hobbes\hobbes_results_orders\Results\*.* "\\labshared\neonatal1\Horizon LIMS\Hemoglobinopathy\Bio-Rad Hemoglobin VARIANTnbs\Daily Result Files\%myyear%\%mymonth%\%myday%"
+copy \\calvin\calvin_results_orders\Results\*.* "\\labshared\neonatal1\Horizon LIMS\Hemoglobinopathy\Bio-Rad Hemoglobin VARIANTnbs\Daily Result Files\%myyear%\%mymonth%\%myday%"
+copy \\hobbes\hobbes_results_orders\Summaries\*.* "\\labshared\neonatal1\Horizon LIMS\Hemoglobinopathy\Bio-Rad Hemoglobin VARIANTnbs\Daily Result Files\%myyear%\%mymonth%\%myday%"
+copy \\calvin\calvin_results_orders\Summaries\*.* "\\labshared\neonatal1\Horizon LIMS\Hemoglobinopathy\Bio-Rad Hemoglobin VARIANTnbs\Daily Result Files\%myyear%\%mymonth%\%myday%"
+
+REM Move the result and summary folders into backup folders
+
+move \\hobbes\hobbes_results_orders\Results\*.* \\hobbes\hobbes_results_orders\Results\%myyear%\%mymonth%\%myday%"\
+move \\calvin\calvin_results_orders\Results\*.* \\calvin\calvin_results_orders\Results\%myyear%\%mymonth%\%myday%"\
+move \\hobbes\hobbes_results_orders\Summaries\*.* \\hobbes\hobbes_results_orders\Summaries\%myyear%\%mymonth%\%myday%\
+move \\calvin\calvin_results_orders\Summaries\*.* \\calvin\calvin_results_orders\Summaries\%myyear%\%mymonth%\%myday%\
+
+REM Copy the worklists from Specimen Gate to the insturments then backup the Specimen gate worklists
+
+copy \\hewpedbprd\sgroot\data\10285\FromSG\*.* \\hobbes\hobbes_results_orders\Worklists
+copy \\hewpedbprd\sgroot\data\10297\FromSG\*.* \\calvin\calvin_results_orders\Worklists
+copy \\hewpedbprd\sgroot\data\10285\FromSG\*.* \\calvin\calvin_results_orders\Worklists
+copy \\hewpedbprd\sgroot\data\10297\FromSG\*.* \\hobbes\hobbes_results_orders\Worklists
+move \\hewpedbprd\sgroot\data\10285\FromSG\*.* \\hewpedbprd\sgroot\data\10285\FromSG\completed\
+move \\hewpedbprd\sgroot\data\10297\FromSG\*.* \\hewpedbprd\sgroot\data\10297\FromSG\completed\
+
+pause
